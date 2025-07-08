@@ -1,46 +1,70 @@
-# Getting Started with Create React App
+# URL Shortener React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the URL Shortener web application! This project is a modern, user-friendly React app that allows you to shorten URLs, track analytics, and manage your links efficiently. Built with TypeScript and Material-UI, it offers a clean interface and useful features for both individual and bulk URL management.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Shorten URLs**: Instantly generate short links for any valid URL.
+- **Bulk Import**: Add multiple URLs at once using the bulk import dialog.
+- **Search & Filter**: Quickly find your links with a responsive search bar.
+- **Statistics**: View total URLs, total clicks, and how many links you created today.
+- **Analytics**: See details and analytics for each shortened URL.
+- **Export**: Download your list of URLs as a JSON file for backup or sharing.
+- **Persistent Storage**: All your data is saved in your browser's local storage.
+- **Dark/Light Mode**: Toggle between dark and light themes for comfortable viewing.
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React** with TypeScript
+- **Material-UI (MUI)** for UI components
+- **Context API** for state management
+- **LocalStorage** for persistence
+- **Jest & React Testing Library** for testing
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
+- Node.js (v16 or above recommended)
+- npm
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
+1. Clone this repository or download the source code.
+2. Open a terminal in the project directory.
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### `npm run build`
+### Running the App
+Start the development server:
+```bash
+npm start
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to use the app.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Building for Production
+To create an optimized production build:
+```bash
+npm run build
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Running Tests
+To run the test suite:
+```bash
+npm test
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Project Structure
+- `src/components/common/` — Header, Footer, and Layout components
+- `src/components/url-shortner/` — All URL shortener features (form, list, analytics, etc.)
+- `src/context/` — App-wide context and types
+- `src/types/` — TypeScript interfaces
+- `public/` — Static assets and HTML
 
-### `npm run eject`
+## Customization
+- You can easily change the app branding by editing the `Header` and `Footer` components.
+- The app is designed to be extended with backend integration if needed.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
