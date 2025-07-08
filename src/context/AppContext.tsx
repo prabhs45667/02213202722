@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { v4 as uuidv4 } from 'uuid';
 import { UrlData } from '../types';
 import { AppContextType } from './types';
+import { logger } from '../shared/middleware/logger';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -24,7 +25,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         setUrls(JSON.parse(saved));
       } catch (e) {
-        console.error('Failed to load URLs from localStorage');
+        logger.error('Failed to load URLs from localStorage');
       }
     }
   }, []);
@@ -91,12 +92,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       customCode: options?.customCode?.trim() || undefined,
     };
     setUrls([newUrl, ...urls]);
-    console.log('URL added:', newUrl);
+    logger.log('URL added:', newUrl);
   };
 
   const deleteUrl = (id: string) => {
     setUrls(urls.filter(url => url.id !== id));
-    console.log('URL deleted:', id);
+    logger.log('URL deleted:', id);
   };
 
   const incrementClicks = (id: string) => {
