@@ -24,6 +24,7 @@ const UrlAnalytics: React.FC<UrlAnalyticsProps> = ({ url, open, onClose }) => {
     return new Date(dateStr).toLocaleString();
   };
 
+  const isExpired = url.validUntil && new Date(url.validUntil) < new Date();
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>URL Analytics</DialogTitle>
@@ -32,11 +33,10 @@ const UrlAnalytics: React.FC<UrlAnalyticsProps> = ({ url, open, onClose }) => {
           <Typography variant="caption" color="text.secondary">
             Short URL
           </Typography>
-          <Typography variant="body1" color="primary" gutterBottom>
+          <Typography variant="body1" color={isExpired ? 'text.secondary' : 'primary'} gutterBottom>
             short.url/{url.shortUrl}
           </Typography>
         </Box>
-        
         <Box sx={{ mb: 2 }}>
           <Typography variant="caption" color="text.secondary">
             Original URL
@@ -45,14 +45,16 @@ const UrlAnalytics: React.FC<UrlAnalyticsProps> = ({ url, open, onClose }) => {
             {url.originalUrl}
           </Typography>
         </Box>
-
         <Box sx={{ mb: 2 }}>
           <Typography variant="caption" color="text.secondary">
             Statistics
           </Typography>
           <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-            <Chip label={`${url.clicks} clicks`} color="primary" />
+            <Chip label={isExpired ? 'Expired' : `${url.clicks} clicks`} color={isExpired ? 'default' : 'primary'} />
             <Chip label={`Created ${formatDate(url.createdAt)}`} variant="outlined" />
+            {url.validUntil && (
+              <Chip label={`Expiry ${formatDate(url.validUntil)}`} variant="outlined" color={isExpired ? 'default' : 'success'} />
+            )}
           </Box>
         </Box>
       </DialogContent>

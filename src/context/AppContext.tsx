@@ -44,13 +44,51 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
   }, [urls, searchTerm]);
 
-  const addUrl = (originalUrl: string) => {
+  const addUrl = (
+    originalUrl: string,
+    options?: { customCode?: string; validityMinutes?: number }
+  ) => {
+    // 5 URL limit (not expired)
+    const now = new Date();
+    const activeUrls = urls.filter(
+      (u) => !u.validUntil || new Date(u.validUntil) > now
+    );
+    if (activeUrls.length >= 5) {
+      alert('You can only have 5 active (not expired) shortened URLs at a time.');
+      return;
+    }
+
+    // Custom code validation
+    let shortUrl = options?.customCode?.trim() || Math.random().toString(36).substring(2, 8);
+    if (options?.customCode) {
+      if (!/^[a-zA-Z0-9]+$/.test(shortUrl)) {
+        alert('Custom shortcode must be alphanumeric.');
+        return;
+      }
+      if (urls.some((u) => u.shortUrl === shortUrl)) {
+        alert('Custom shortcode already exists. Please choose another.');
+        return;
+      }
+    } else {
+      // Ensure random code is unique
+      while (urls.some((u) => u.shortUrl === shortUrl)) {
+        shortUrl = Math.random().toString(36).substring(2, 8);
+      }
+    }
+
+    // Validity period
+    const validityMinutes = options?.validityMinutes ?? 30;
+    const createdAt = new Date();
+    const validUntil = new Date(createdAt.getTime() + validityMinutes * 60000).toISOString();
+
     const newUrl: UrlData = {
       id: uuidv4(),
       originalUrl,
-      shortUrl: Math.random().toString(36).substring(2, 8),
-      createdAt: new Date().toISOString(),
-      clicks: 0
+      shortUrl,
+      createdAt: createdAt.toISOString(),
+      clicks: 0,
+      validUntil,
+      customCode: options?.customCode?.trim() || undefined,
     };
     setUrls([newUrl, ...urls]);
     console.log('URL added:', newUrl);
@@ -68,14 +106,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   return (
-    <AppContext.Provider value={{ 
-      urls, 
-      filteredUrls, 
-      searchTerm, 
-      addUrl, 
-      deleteUrl, 
+    <AppContext.Provider value={{
+      urls,
+      filteredUrls,
+      searchTerm,
+      addUrl,
+      deleteUrl,
       setSearchTerm,
-      incrementClicks 
+      incrementClicks,
     }}>
       {children}
     </AppContext.Provider>

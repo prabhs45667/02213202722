@@ -33,25 +33,28 @@ const UrlItem: React.FC<UrlItemProps> = ({ url }) => {
     window.open(url.originalUrl, '_blank');
   };
 
+
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString();
+    return date.toLocaleString();
   };
+
+  const isExpired = url.validUntil && new Date(url.validUntil) < new Date();
 
   return (
     <>
-      <Card sx={{ mb: 2, '&:hover': { boxShadow: 3 } }}>
+      <Card sx={{ mb: 2, '&:hover': { boxShadow: 3 }, opacity: isExpired ? 0.5 : 1 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <Box sx={{ flex: 1, mr: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                <Typography variant="body1" color="primary" fontWeight="medium">
+                <Typography variant="body1" color={isExpired ? 'text.secondary' : 'primary'} fontWeight="medium">
                   short.url/{url.shortUrl}
                 </Typography>
                 <Chip 
-                  label={`${url.clicks} clicks`} 
+                  label={isExpired ? 'Expired' : `${url.clicks} clicks`} 
                   size="small" 
-                  color="primary" 
+                  color={isExpired ? 'default' : 'primary'} 
                   variant="outlined" 
                 />
               </Box>
@@ -69,13 +72,21 @@ const UrlItem: React.FC<UrlItemProps> = ({ url }) => {
               </Typography>
               <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
                 Created: {formatDate(url.createdAt)}
+                {url.validUntil && (
+                  <>
+                    {' | Expiry: '}
+                    {formatDate(url.validUntil)}
+                  </>
+                )}
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: 0.5 }}>
-              <Tooltip title="Open URL">
-                <IconButton onClick={handleOpen} size="small">
-                  <OpenInNewIcon fontSize="small" />
-                </IconButton>
+              <Tooltip title={isExpired ? 'URL expired' : 'Open URL'}>
+                <span>
+                  <IconButton onClick={handleOpen} size="small" disabled={!!isExpired}>
+                    <OpenInNewIcon fontSize="small" />
+                  </IconButton>
+                </span>
               </Tooltip>
               <Tooltip title="Copy short URL">
                 <IconButton onClick={handleCopy} size="small">

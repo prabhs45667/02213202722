@@ -14,6 +14,8 @@ import UrlShortenerForm from './components/url-shortner/UrlShortenerForm';
 import UrlList from './components/url-shortner/UrlList';
 import SearchBar from './components/url-shortner/SearchBar';
 import Statistics from './components/url-shortner/Statistics';
+import Redirect from './components/url-shortner/Redirect';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -40,12 +42,20 @@ function App() {
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Box>
-        <Layout>
-          <Statistics />
-          <UrlShortenerForm />
-          <SearchBar />
-          <UrlList />
-        </Layout>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Statistics />
+                <UrlShortenerForm />
+                <SearchBar />
+                <UrlList />
+              </Layout>
+            }
+          />
+          <Route path=":code" element={<Redirect />} />
+        </Routes>
       </AppProvider>
     </ThemeProvider>
   );

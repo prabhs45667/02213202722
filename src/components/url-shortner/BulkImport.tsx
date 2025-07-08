@@ -19,15 +19,17 @@ interface BulkImportProps {
 const BulkImport: React.FC<BulkImportProps> = ({ open, onClose }) => {
   const [urls, setUrls] = useState('');
   const { addUrl } = useAppContext();
+  const [validity, setValidity] = useState(30);
 
   const handleImport = () => {
     const urlList = urls.split('\n').filter(url => url.trim());
     urlList.forEach(url => {
       if (url.trim()) {
-        addUrl(url.trim());
+        addUrl(url.trim(), { validityMinutes: validity });
       }
     });
     setUrls('');
+    setValidity(30);
     onClose();
   };
 
@@ -44,8 +46,18 @@ const BulkImport: React.FC<BulkImportProps> = ({ open, onClose }) => {
           fullWidth
           value={urls}
           onChange={(e) => setUrls(e.target.value)}
-          placeholder="https://example.com&#10;https://another-example.com"
+          placeholder="https://example.com\nhttps://another-example.com"
           variant="outlined"
+        />
+        <TextField
+          type="number"
+          value={validity}
+          onChange={e => setValidity(Math.max(1, Number(e.target.value)))}
+          label="Validity (min)"
+          variant="outlined"
+          inputProps={{ min: 1 }}
+          helperText="Default: 30 min for all imported URLs"
+          sx={{ mt: 2 }}
         />
       </DialogContent>
       <DialogActions>
